@@ -1,7 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:shedule_app/Screens/homescreen.dart';
 import 'package:shedule_app/Screens/profilescreen.dart';
 
 import '../Utils/app_colors.dart';
@@ -27,6 +30,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Color focus = Colors.white.withOpacity(0.8);
 
+
+  final _auth = FirebaseAuth.instance;
 
 
   @override
@@ -266,7 +271,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               if(validateEmail(nameController.text)) {
                                 EasyLoading.showToast('Enter valid email!');
                               } else {
-
+                                signIn(nameController.text, passwordControler.text);
                               }
 
                             },
@@ -359,5 +364,15 @@ class _LoginScreenState extends State<LoginScreen> {
       return true;
     else
       return false;
+  }
+
+  void signIn(String email, String password) async{
+    EasyLoading.show(status: 'loading...');
+    await _auth.signInWithEmailAndPassword(email: email, password: password).then((uid) =>{
+    EasyLoading.dismiss(),
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => HomeScreen()))
+    }).catchError((e){
+      Fluttertoast.showToast(msg: e!.message);
+    });
   }
 }

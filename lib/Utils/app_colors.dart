@@ -13,6 +13,12 @@ class AppColors {
 
   static const textColor = Color(0xff98A7BB);
 
+  static const redContainer = Color(0xffF85454);
+  static const greenContainer = Color(0xffD8F9F5);
+  static const purpleContainer = Color(0xffEEEAFF);
+  static const brownContainer = Color(0xffFEECDE);
+
+
 
 
 }
