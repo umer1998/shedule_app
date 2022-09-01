@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shedule_app/Screens/homescreen.dart';
+import 'package:shedule_app/Screens/loginscreen.dart';
 import 'package:shedule_app/Utils/app_colors.dart';
 
 class DrawerScreen extends StatefulWidget {
@@ -17,6 +19,14 @@ class _DrawerState extends State<DrawerScreen> {
   var activeScreen = HomeScreen();
   final ImagePicker _picker = ImagePicker();
   late PickedFile? _imageFile = null;
+
+  late final prefs ;
+
+  @override
+  void initState(){
+    super.initState();
+    init();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -539,14 +549,24 @@ class _DrawerState extends State<DrawerScreen> {
                           ],
                         ),
                       ),
-                      Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Text(
-                          "Sign Out",
-                          style: TextStyle(
-                              fontFamily: "semibold",
-                              fontSize: 22,
-                              color: AppColors.darkOrange),
+                      GestureDetector(
+                        onTap: (){
+                          prefs.clear();
+                          Navigator.pushReplacement(context,
+                              MaterialPageRoute(builder:
+                          (context) => LoginScreen()
+                          ));
+
+                        },
+                        child: Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Text(
+                            "Sign Out",
+                            style: TextStyle(
+                                fontFamily: "semibold",
+                                fontSize: 22,
+                                color: AppColors.darkOrange),
+                          ),
                         ),
                       ),
                     ],
@@ -560,6 +580,10 @@ class _DrawerState extends State<DrawerScreen> {
     );
   }
 
+  Future init() async {
+    prefs = await SharedPreferences.getInstance();
+
+  }
   void selectDestination(int index) {
     setState(() {
       _selectedDestination = index;

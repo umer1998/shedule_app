@@ -1,13 +1,17 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:shedule_app/Screens/HomeScreen.dart';
-import 'package:shedule_app/Screens/loginscreen.dart';
+import 'package:shedule_app/Screens/SplashScreen.dart';
+
 
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await  Firebase.initializeApp();
+
+
+
+
   runApp(const MyApp());
   configLoading();
 }
@@ -26,10 +30,23 @@ void configLoading() {
     ..userInteractions = true
     ..dismissOnTap = false;
 }
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
 
-  // This widget is the root of your application.
+class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+  @override
+  void initState(){
+
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -38,9 +55,9 @@ class MyApp extends StatelessWidget {
 
         primarySwatch: Colors.deepOrange,
       ),
-      home: LoginScreen(),
+      home: SplashScreen(),
       builder: EasyLoading.init(),
+
     );
   }
 }
-

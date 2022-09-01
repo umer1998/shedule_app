@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shedule_app/Screens/homescreen.dart';
 import 'package:shedule_app/Screens/profilescreen.dart';
+import 'package:shedule_app/Utils/PrefConsts.dart';
 
 import '../Utils/app_colors.dart';
 
@@ -27,11 +29,16 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordControler = TextEditingController();
   FocusNode password_focus = FocusNode();
-
   Color focus = Colors.white.withOpacity(0.8);
-
-
   final _auth = FirebaseAuth.instance;
+
+  late final prefs ;
+
+  @override
+  void initState(){
+    super.initState();
+    init();
+  }
 
 
   @override
@@ -183,14 +190,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     bottomLeft: Radius.circular(14),
                                   ),
                                   border: Border.all(color: AppColors.lightGrey , width: 0.5),
-                                boxShadow: [
-                                  BoxShadow(
-                                    offset: Offset(0, 0),
-                                    blurRadius: 2,
-                                    spreadRadius: 2,
-                                    color: Color(0x79cdcdd0),
-                                  ),
-                                ],
+
 
                               ),
                               child: Padding(
@@ -370,9 +370,17 @@ class _LoginScreenState extends State<LoginScreen> {
     EasyLoading.show(status: 'loading...');
     await _auth.signInWithEmailAndPassword(email: email, password: password).then((uid) =>{
     EasyLoading.dismiss(),
+      prefs.setBool(PrefConsts.isLogin , true),
       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => HomeScreen()))
     }).catchError((e){
+      EasyLoading.dismiss();
+
       Fluttertoast.showToast(msg: e!.message);
     });
+  }
+
+  Future init() async {
+     prefs = await SharedPreferences.getInstance();
+
   }
 }
